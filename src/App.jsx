@@ -1,7 +1,7 @@
 import App1 from './components/App1'
 import TeamLogoSlider from './components/TeamLogoSlider'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/NavBar.jsx'
+import Navbar from './components/Navbar.jsx'
 import Home from './components/Home.jsx';
 import About from './components/About.jsx'
 import SignInModal from './components/SignInModal';

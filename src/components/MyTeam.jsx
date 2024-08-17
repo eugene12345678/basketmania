@@ -22,7 +22,7 @@ const MyTeam = ({ myTeam, onRemovePlayer, onBack }) => {
           ))
         )}
       </div>
-      <button onClick={onBack}>Back to Players</button>
+      <button className='button' onClick={onBack}>Back to Players</button>
     </div>
   );
 };

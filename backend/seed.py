@@ -1,5 +1,5 @@
-from datetime import datetime  # Import datetime to handle date conversions
-from database import db, app  # Import db and app from your database module
+from datetime import datetime  
+from database import db, app  
 from models import User, Team, Player, TeamPlayer
 
 # Sample data to seed the database
@@ -14,8 +14,97 @@ teams_data = [
 ]
 
 players_data = [
-    {'name': 'Player One', 'age': 24, 'position': 'Forward', 'height': 6.1, 'weight': 180, 'birthdate': '1999-01-15', 'image_url': 'http://example.com/player1.jpg'},
-    {'name': 'Player Two', 'age': 27, 'position': 'Guard', 'height': 5.9, 'weight': 160, 'birthdate': '1996-03-22', 'image_url': 'http://example.com/player2.jpg'},
+
+      {
+        'name': 'LeBron James', 
+        'age': 39,  
+        'position': 'Forward', 
+        'height': 6.9,  
+        'weight': 250,  
+        'birthdate': '1984-12-30', 
+        'image_url': 'https://i.pinimg.com/564x/6a/ae/f7/6aaef74808fdfbe4b25c41699fba6d81.jpg'
+    },
+    {
+        'name': 'Kevin Durant', 
+        'age': 36, 
+        'position': 'Forward', 
+        'height': 6.83,  
+        'weight': 240,  
+        'birthdate': '1988-09-29', 
+        'image_url': 'https://i.pinimg.com/236x/23/18/93/2318930549a4f8240f01722d860e178b.jpg'
+    },
+    {
+        'name': 'Antetokounmpo', 
+        'age': 29, 
+        'position': 'Forward', 
+        'height': 6.92, 
+        'weight': 242,  # 
+        'birthdate': '1994-12-06', 
+        'image_url': 'https://i.pinimg.com/564x/a0/d6/f0/a0d6f04ddb9f5a193eefb408a4aa253f.jpg'
+    },
+    {
+        'name': 'Stephen Curry', 
+        'age': 36,  
+        'position': 'Guard', 
+        'height': 6.17, 
+        'weight': 185,  # 
+        'birthdate': '1988-03-14', 
+        'image_url': 'https://i.pinimg.com/236x/99/76/01/997601ff2e50374e90347a5aba290316.jpg'
+    },
+    {
+        'name': 'Luka Dončić', 
+        'age': 25,  
+        'position': 'Guard/Forward', 
+        'height': 6.58, 
+        'weight': 230,  
+        'birthdate': '1999-02-28', 
+        'image_url': 'https://i.pinimg.com/236x/ae/0e/22/ae0e2264f9f72841c52a7feb9a0a99a1.jpg'
+    },
+    {
+        'name': 'Joel Embiid', 
+        'age': 30,  
+        'position': 'Center', 
+        'height': 7.0, 
+        'weight': 280,   
+        'birthdate': '1994-03-16', 
+        'image_url': 'https://i.pinimg.com/236x/69/8b/27/698b274894766b3e3c55786b53c861b9.jpg'
+    },
+    {
+        'name': 'Zion Williamson', 
+        'age': 24,  
+        'position': 'Forward', 
+        'height': 6.5, 
+        'weight': 284,  
+        'birthdate': '2000-07-06', 
+        'image_url': 'https://i.pinimg.com/236x/cf/d1/47/cfd1476b8f49d4ecf3c742d77b668b80.jpg'
+    },
+    {
+        'name': 'Myles Turner', 
+        'age': 27,  
+        'position': 'Center', 
+        'height': 6.83, 
+        'weight': 250,  
+        'birthdate': '1996-03-24', 
+        'image_url': 'https://www.basketballnetwork.net/.image/c_fit%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1290/MTkyNzQ0MDkxMTkxMDkyMjUz/myles-turner.jpg'
+    },
+    {
+        'name': 'Pascal Siakam', 
+        'age': 30,  
+        'position': 'Forward', 
+        'height': 6.75,  
+        'weight': 230,  
+        'birthdate': '1994-04-02', 
+        'image_url': 'https://basketnews.com/image-415326-crop700x700.jpg'
+    },
+    {
+        'name': 'Darius Garland', 
+        'age': 24,  
+        'position': 'Guard', 
+        'height': 6.08,  
+        'weight': 192,  
+        'birthdate': '2000-01-26', 
+        'image_url': 'https://i.pinimg.com/236x/5b/b7/41/5bb7418244b5323c350dc12768e0bb66.jpg'
+    },
 ]
 
 team_players_data = [
@@ -36,11 +125,11 @@ def seed_db():
             new_user = User(
                 username=user_data['username'],
                 email=user_data['email'],
-                password=user_data['password']  # Store raw password for seeding; ideally, hash in production
+                password=user_data['password']  # Stores the password for seeding; ideally, hash in production
             )
             db.session.add(new_user)
 
-        db.session.commit()  # Commit after adding users to save them in the database
+        db.session.commit()  
 
         # Create teams
         for team_data in teams_data:
@@ -63,12 +152,12 @@ def seed_db():
                 position=player_data['position'],
                 height=player_data['height'],
                 weight=player_data['weight'],
-                birthdate=birthdate,  # Use the date object here
+                birthdate=birthdate,  
                 image_url=player_data['image_url']
             )
             db.session.add(new_player)
 
-        db.session.commit()  # Commit after adding players
+        db.session.commit()  
 
         # Create team-players relationships
         for team_player_data in team_players_data:
@@ -79,7 +168,7 @@ def seed_db():
             )
             db.session.add(new_team_player)
 
-        db.session.commit()  # Commit after adding team-players
+        db.session.commit()  
 
         print("Database seeded successfully.")
 

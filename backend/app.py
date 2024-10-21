@@ -2,7 +2,7 @@ from flask import jsonify, request
 from database import app, db  # Importing app and db from the database.py
 from models import User, Team, Player, TeamPlayer
 from flask_migrate import Migrate
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from datetime import datetime
 
 # Initialize migration
@@ -48,14 +48,14 @@ def manage_users():
 # Update user details
 @app.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
-    user = User.query.get_or_404(id)  # Get user or return 404 if not found
+    user = User.query.get_or_404(id) 
 
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
 
-    # Update fields only if provided
+   
     if username:
         user.username = username
     if email:

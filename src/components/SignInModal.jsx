@@ -1,8 +1,7 @@
-
 import React from 'react';
+import '../App.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import '../App.css';
 
 const SignInModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -15,7 +14,7 @@ const SignInModal = ({ isOpen, onClose }) => {
       confirmPassword: '',
     },
     validationSchema: Yup.object({
-      username: Yup.string().required('Required'), // Username validation
+      username: Yup.string().required('Required'),
       email: Yup.string()
         .email('Invalid email format')
         .required('Required'),
@@ -26,15 +25,16 @@ const SignInModal = ({ isOpen, onClose }) => {
         .oneOf([Yup.ref('password'), null], 'Passwords must match')
         .required('Required'),
     }),
+
     onSubmit: async (values) => {
       try {
-        const response = await fetch('http://localhost:5000/signup', { // Adjust URL based on your backend server
+        const response = await fetch('http://localhost:5000/signup', { 
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            username: values.username, // Include username in the request
+            username: values.username, 
             email: values.email,
             password: values.password,
           }),
@@ -53,7 +53,6 @@ const SignInModal = ({ isOpen, onClose }) => {
       }
     },
   });
-
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -123,6 +122,4 @@ const SignInModal = ({ isOpen, onClose }) => {
     </div>
   );
 };
-
 export default SignInModal;
-

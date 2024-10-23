@@ -66,44 +66,6 @@ def update_user(id):
     db.session.commit()  # Commit changes to the database
     return jsonify(user.to_dict()), 200
 
-@app.route('/signup', methods=['GET', 'POST'])
-def sign_up():
-    if request.method == 'POST':
-        data = request.get_json()  # Get the JSON data sent from the frontend
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
-
-        # Validate user credentials
-        if not username or not email or not password:
-            return error_response("Username, email, and password are required.", 400)
-
-        # Check if user already exists
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            return error_response("User already exists.", 400)
-
-        # Create new user with raw password (not recommended)
-        new_user = User(username=username, email=email, password=password)  # Store raw password
-        db.session.add(new_user)
-        db.session.commit()
-
-        return jsonify(new_user.to_dict()), 201
-
-    elif request.method == 'GET':
-        email = request.args.get('email')  # Optional query parameter for specific user
-        if email:
-            user = User.query.filter_by(email=email).first()
-            if user:
-                return jsonify(user.to_dict()), 200
-            else:
-                return error_response("User not found.", 404)
-        else:
-            # Return all users if no email is provided
-            users = User.query.all()
-            return jsonify([user.to_dict() for user in users]), 200
-
-
 
 # Routes for Teams
 @app.route('/teams', methods=['GET', 'POST'])
@@ -204,6 +166,42 @@ def handle_team(id):
         db.session.delete(team)
         db.session.commit()
         return jsonify({'message': 'Team deleted successfully'}), 204
+@app.route('/signup', methods=['GET', 'POST'])
+def sign_up():
+    if request.method == 'POST':
+        data = request.get_json() # Get the JSON data sent from the frontend
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+
+        # Validate user credentials
+        if not username or not email or not password:
+            return error_response("Username, email, and password are required.", 400)
+
+        # Check if user already exists
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            return error_response("User already exists.", 400)
+
+        # Create new user with raw password 
+        new_user = User(username=username, email=email, password=password) # Store raw password
+        db.session.add(new_user)
+        db.session.commit()
+
+        return jsonify(new_user.to_dict()), 201
+
+    elif request.method == 'GET':
+        email = request.args.get('email') # Optional query parameter for specific user
+        if email:
+            user = User.query.filter_by(email=email).first()
+            if user:
+                return jsonify(user.to_dict()), 200
+            else:
+                return error_response("User not found.", 404)
+        else:
+            # Return all users if no email is provided
+            users = User.query.all()
+            return jsonify([user.to_dict() for user in users]), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

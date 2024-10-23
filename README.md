@@ -1,6 +1,9 @@
 # Backend API for Player Management
 ## Overview
-This backend serves as an API for managing players and user teams in a sports application. It allows you to fetch players, view and manage user teams, and perform CRUD operations.
+**BasketMania** is a comprehensive sports management application designed specifically for basketball enthusiasts. The backend of BasketMania serves as a robust API that facilitates seamless interactions between users and the application. It allows users to create and manage basketball teams, track player statistics, and engage with the basketball community.
+The application is built using **Flask**, a lightweight and powerful web framework for Python, which makes it easy to develop RESTful APIs. The backend is structured to support various functionalities, including user authentication, team management, and player management, ensuring a smooth and efficient user experience.
+
+### Key Functionalities
 
 ## Endpoints
 ### Players
@@ -75,23 +78,42 @@ cd BASKETMANIA
 ```bash
 npm install
 ```
-4 Start the JSON Server:
-
-To run the JSON server for players data:
+4 Create a virtual environment:
 
 ```bash
-json-server --watch db.json --port 3000
+python -m venv venv
 ```
-To run the JSON server for the user's team:
+5 Activate the virtual environment:
+
+- On Windows:
 ```bash
-json-server --watch team.json --port 3001
+venv\Scripts\activate
 ```
-5 Start the server:
+- On macOS/Linux:
+```bash
+source venv/bin/activate
+```
+6 Install the required packages:
+```bash
+pip install -r requirements.txt
+```
+7 Set up the database:
+```bash
+flask db init
+flask db migrate
+flask db upgrade
+```
+8 Usage
+To start the Flask server, run the following command:
+```bash
+flask run
+```
+The server will start on http://127.0.0.1:5000/. You can use tools like Postman or Curl to interact with the API endpoints.
+9 Start the server:
 ```bash
 npm run dev
 ```
 
-oo2 The server will run on **http://localhost:3000** for players and **http://localhost:3001** for the user's team.
 
 ### License
 This project is licensed under the MIT License. See the LICENSE file for details.

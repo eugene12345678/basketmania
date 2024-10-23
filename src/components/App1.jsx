@@ -9,8 +9,9 @@ const App1 = () => {
   const [selectedTeamPlayers, setSelectedTeamPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [myTeam, setMyTeam] = useState([]);
-  const [view, setView] = useState('players'); // 'players' or 'myTeam'
+  const [myTeamAlpha, setMyTeamAlpha] = useState([]);
+  const [myTeamBeta, setMyTeamBeta] = useState([]);
+  const [view, setView] = useState('players'); // 'players', 'myTeamAlpha', 'myTeamBeta'
 
   useEffect(() => {
     fetch('https://basketmania-backend.vercel.app/players')
@@ -31,81 +32,48 @@ const App1 = () => {
       });
   }, []);
 
-  useEffect(() => {
-    fetch('https://team-backend-delta.vercel.app/my_team')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setMyTeam(data);
-      })
-      .catch(error => {
-        setError(error.message);
-      });
-  }, []);
-
   const handlePlayerClick = (player) => {
     const teamPlayers = allPlayers.filter(p => p.team === player.team);
     setSelectedTeamPlayers(teamPlayers);
   };
 
   const handleAddPlayer = (player) => {
-    // Check if the player is already in the team
-    const isPlayerInTeam = myTeam.some(p => p.player_id === player.player_id);
-  
-    if (isPlayerInTeam) {
-      alert("You can't add the same player twice to your team!");
-      return;
+    // Prompt the user for the team selection (Team Alpha or Team Beta)
+    const teamChoice = window.prompt('Which team would you like to add the player to? (Alpha/Beta)', 'Alpha');
+    
+    if (!teamChoice) return; // If no choice is made, exit
+
+    // Check if player is already in the chosen team
+    if (teamChoice.toLowerCase() === 'alpha') {
+      const isPlayerInAlpha = myTeamAlpha.some(p => p.player_id === player.player_id);
+      if (isPlayerInAlpha) {
+        alert('This player is already in Team Alpha!');
+        return;
+      }
+      // Add player to Team Alpha
+      setMyTeamAlpha(prevTeam => [...prevTeam, player]);
+    } else if (teamChoice.toLowerCase() === 'beta') {
+      const isPlayerInBeta = myTeamBeta.some(p => p.player_id === player.player_id);
+      if (isPlayerInBeta) {
+        alert('This player is already in Team Beta!');
+        return;
+      }
+      // Add player to Team Beta
+      setMyTeamBeta(prevTeam => [...prevTeam, player]);
+    } else {
+      alert('Invalid team choice. Please choose either Alpha or Beta.');
     }
-  
-    console.log('Adding player:', player); // Debugging line
-  
-    // Optimistically add the player to the UI
-    setMyTeam(prevTeam => [...prevTeam, player]);
-  
-    fetch('https://team-backend-delta.vercel.app/my_team', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(player),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Player added:', data); // Debugging line
-  
-        // No need to update the state again since we optimistically added the player
-      })
-      
   };
-   const handleRemovePlayer = (playerId) => {
-    // Optimistically remove the player from the UI
-    setMyTeam(prevTeam => prevTeam.filter(player => player.player_id !== playerId));
-  
-    fetch(`https://team-backend-delta.vercel.app/my_team/${playerId}`, {
-      method: 'DELETE',
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Assuming your backend returns some JSON response
-      })
-      .then(data => {
-        console.log('Player successfully deleted:', data); // Debugging line
-        // Optionally update the state here if needed, but optimistic UI already removed the player
-      })
-     
+
+  const handleRemovePlayer = (playerId, team) => {
+    if (team === 'Alpha') {
+      setMyTeamAlpha(prevTeam => prevTeam.filter(player => player.player_id !== playerId));
+    } else if (team === 'Beta') {
+      setMyTeamBeta(prevTeam => prevTeam.filter(player => player.player_id !== playerId));
+    }
+
+    // If you want to remove from the backend, you'd make a DELETE request here
   };
-  
 
   const handleViewChange = (view) => {
     setView(view);
@@ -126,7 +94,7 @@ const App1 = () => {
                 onPlayerClick={() => {}}
                 onAddPlayer={handleAddPlayer}
               />
-              <button className='button' onClick={() => setSelectedTeamPlayers([])}>Back to Best Players</button>
+              <button className="button" onClick={() => setSelectedTeamPlayers([])}>Back to Best Players</button>
             </>
           ) : (
             <Players
@@ -135,13 +103,25 @@ const App1 = () => {
               onAddPlayer={handleAddPlayer}
             />
           )}
-          <button className='button' onClick={() => handleViewChange('myTeam')}>View My Team</button>
+          <button className="button" onClick={() => handleViewChange('myTeamAlpha')}>View Team Alpha</button>
+          <button className="button" onClick={() => handleViewChange('myTeamBeta')}>View Team Beta</button>
         </>
       )}
-      {view === 'myTeam' && (
+
+      {view === 'myTeamAlpha' && (
         <MyTeam
-          myTeam={myTeam}
-          onRemovePlayer={handleRemovePlayer}
+          teamName="Alpha"
+          myTeam={myTeamAlpha}
+          onRemovePlayer={playerId => handleRemovePlayer(playerId, 'Alpha')}
+          onBack={() => handleViewChange('players')}
+        />
+      )}
+
+      {view === 'myTeamBeta' && (
+        <MyTeam
+          teamName="Beta"
+          myTeam={myTeamBeta}
+          onRemovePlayer={playerId => handleRemovePlayer(playerId, 'Beta')}
           onBack={() => handleViewChange('players')}
         />
       )}

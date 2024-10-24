@@ -27,7 +27,7 @@
 //   );
 // };
 
-// export default MyTeam;
+
 import React from 'react';
 
 const MyTeam = ({ teamName, myTeam, onRemovePlayer, onBack }) => {

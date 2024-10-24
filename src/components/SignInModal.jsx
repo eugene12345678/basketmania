@@ -28,7 +28,7 @@ const SignInModal = ({ isOpen, onClose }) => {
 
     onSubmit: async (values) => {
       try {
-        const response = await fetch('http://localhost:5000/signup', { 
+        const response = await fetch('https://basketmania-1-r1rb.onrender.com/signup', { 
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

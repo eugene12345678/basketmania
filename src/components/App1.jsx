@@ -14,7 +14,7 @@ const App1 = () => {
   const [view, setView] = useState('players'); // 'players', 'myTeamAlpha', 'myTeamBeta'
 
   useEffect(() => {
-    fetch('https://basketmania-backend.vercel.app/players')
+    fetch('https://basketmania-1-r1rb.onrender.com/players')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
